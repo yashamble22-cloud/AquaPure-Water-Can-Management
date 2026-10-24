@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaPure Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 24px;
+            background: #eef7f8;
+            color: #173b45;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        h1 { margin: 0; color: #087f8c; }
+        button {
+            border: 0;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #087f8c;
+            color: white;
+            font-weight: bold;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #1233;
+        }
+        .card h3 { margin: 0 0 12px; font-size: 15px; }
+        .card p { margin: 0; font-size: 26px; font-weight: bold; color: #087f8c; }
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 12px; border-bottom: 1px solid #dce8ea; text-align: left; }
+        th { background: #dff2f4; }
+        #message { margin: 16px 0; }
+        @media print {
+            button { display: none; }
+            body { background: white; padding: 0; }
+            .card, .table-wrap { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>💧 AquaPure Reports</h1>
+            <p>Water Can Management System</p>
+        </div>
+        <div>
+            <button onclick="location.href='/'">Dashboard</button>
+            <button onclick="window.print()">Print Report</button>
+        </div>
+    </header>
+
+    <p id="message">Loading reports...</p>
+
+    <section class="cards">
+        <div class="card"><h3>Total Customers</h3><p id="customers">—</p></div>
+        <div class="card"><h3>Total Orders</h3><p id="orders">—</p></div>
+        <div class="card"><h3>Total Sales</h3><p id="sales">—</p></div>
+        <div class="card"><h3>Delivered</h3><p id="delivered">—</p></div>
+        <div class="card"><h3>Pending</h3><p id="pending">—</p></div>
+        <div class="card"><h3>Cancelled</h3><p id="cancelled">—</p></div>
+    </section>
+
+    <h2>Order History</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="ordersBody">
+                <tr><td colspan="7">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+    async function loadReports() {
+        const message = document.getElementById("message");
+
+        try {
+            const response = await fetch("/api/reports", {
+                credentials: "same-origin"
+            });
+            const data = await response.json();
+
+            if (response.status === 401) {
+                message.textContent = "Please log in as admin first.";
+                return;
+            }
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Could not load reports");
+            }
+
+            const s = data.summary;
+            document.getElementById("customers").textContent = s.totalCustomers;
+            document.getElementById("orders").textContent = s.totalOrders;
+            document.getElementById("sales").textContent =
+                "₹" + Number(s.totalSales).toFixed(2);
+            document.getElementById("delivered").textContent = s.deliveredOrders;
+            document.getElementById("pending").textContent = s.pendingOrders;
+            document.getElementById("cancelled").textContent = s.cancelledOrders;
+
+            const body = document.getElementById("ordersBody");
+            body.replaceChildren();
+
+            if (!data.orders.length) {
+                body.innerHTML = '<tr><td colspan="7">No orders found.</td></tr>';
+            } else {
+                data.orders.forEach(order => {
+                    const row = document.createElement("tr");
+                    [
+                        order.id,
+                        order.customer_name,
+                        order.can_quantity,
+                        "₹" + Number(order.price).toFixed(2),
+                        order.status,
+                        order.payment_status || "Unpaid",
+                        order.order_date
+                            ? new Date(order.order_date).toLocaleDateString("en-IN")
+                            : "—"
+                    ].forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value ?? "—";
+                        row.appendChild(cell);
+                    });
+                    body.appendChild(row);
+                });
+            }
+            message.textContent = "Report loaded successfully.";
+        } catch (error) {
+            message.textContent = "Report error: " + error.message;
+        }
+    }
+
+    loadReports();
+    </script>
+</body>
+</html>

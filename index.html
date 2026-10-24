@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#092c49">
+    <title>AquaPure | Water Can Management</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">💧</div>
+            <div>
+                <h2>AquaPure</h2>
+                <p>WATER MANAGEMENT</p>
+            </div>
+        </div>
+
+        <p class="nav-heading">MAIN MENU</p>
+
+        <nav class="sidebar-nav">
+            <a class="nav-link active" href="#dashboard">
+                <span>▦</span> Dashboard
+            </a>
+            <a class="nav-link" href="#customers">
+                <span>♙</span> Customers
+            </a>
+            <a class="nav-link" href="#stock-management">
+                <span>▣</span> Water Can Stock
+            </a>
+            <a class="nav-link" href="#place-order">
+                <span>＋</span> Place Order
+            </a>
+            <a class="nav-link" href="#order-history">
+                <span>☷</span> Order History
+            </a>
+            <a class="nav-link" href="/reports.html">
+                <span>▤</span> Reports
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-status">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+            <p>AquaPure Management</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="app-main">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div>
+                <p class="topbar-label">OVERVIEW</p>
+                <h2 id="pageHeading">Dashboard</h2>
+            </div>
+
+            <div class="admin-profile">
+                <div class="admin-avatar">A</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <span>Management Panel</span>
+                </div>
+                <button type="button" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="page-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Dashboard Overview</h2>
+                        <p>Monitor your water can business at a glance.</p>
+                    </div>
+                    <span class="status-badge">
+                        <span class="status-dot"></span> Active
+                    </span>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <span class="dashboard-icon">👥</span>
+                        <h3>Total Customers</h3>
+                        <p id="totalCustomers">0</p>
+                        <small>Registered customers</small>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span class="dashboard-icon">💧</span>
+                        <h3>Total Orders</h3>
+                        <p id="totalOrders">0</p>
+                        <small>Orders recorded</small>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span class="dashboard-icon">💰</span>
+                        <h3>Total Sales</h3>
+                        <p id="totalSales">₹0</p>
+                        <small>Sales summary</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADD CUSTOMER -->
+            <section id="add-customer" class="page-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Add New Customer</h2>
+                        <p>Register a customer in your database.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <form id="customerForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name">Customer Name</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    required
+                                    maxlength="100"
+                                    autocomplete="name"
+                                    placeholder="Enter customer name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    required
+                                    autocomplete="tel"
+                                    placeholder="Enter phone number">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="address">Address</label>
+                                <textarea
+                                    id="address"
+                                    rows="3"
+                                    placeholder="Enter customer address"></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit">＋ Add Customer</button>
+                    </form>
+
+                    <p id="message" role="status" aria-live="polite"></p>
+                </div>
+            </section>
+
+            <!-- CUSTOMER LIST -->
+            <section id="customers" class="page-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Customer Directory</h2>
+                        <p>Search, view and edit registered customers.</p>
+                    </div>
+
+                    <button type="button" class="secondary-button"
+                        onclick="loadCustomerList()">
+                        ↻ Refresh
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-toolbar">
+                        <div class="form-group search-field">
+                            <label for="customerSearch">Search Customers</label>
+                            <input
+                                type="search"
+                                id="customerSearch"
+                                placeholder="Search by name or phone..."
+                                oninput="loadCustomerList()">
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerListBody">
+                                <tr>
+                                    <td colspan="5">Loading customers...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WATER CAN STOCK -->
+            <section id="stock-management" class="page-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Water Can Inventory</h2>
+                        <p>Monitor available cans and cans currently in use.</p>
+                    </div>
+
+                    <button type="button" class="secondary-button"
+                        onclick="loadStock()">
+                        ↻ Refresh Stock
+                    </button>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <span class="dashboard-icon">📦</span>
+                        <h3>Total Cans</h3>
+                        <p id="stockTotal">0</p>
+                        <small>Total inventory</small>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span class="dashboard-icon">✅</span>
+                        <h3>Available Cans</h3>
+                        <p id="stockAvailable">0</p>
+                        <small>Ready for orders</small>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span class="dashboard-icon">🚚</span>
+                        <h3>Cans in Use</h3>
+                        <p id="stockInUse">0</p>
+                        <small>Currently unavailable</small>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Update Inventory</h3>
+                    <p class="card-description">
+                        Enter the latest total and available can quantities.
+                    </p>
+
+                    <form id="stockForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="totalCansInput">Total Cans</label>
+                                <input
+                                    type="number"
+                                    id="totalCansInput"
+                                    min="0"
+                                    step="1"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="availableCansInput">Available Cans</label>
+                                <input
+                                    type="number"
+                                    id="availableCansInput"
+                                    min="0"
+                                    step="1"
+                                    required>
+                            </div>
+                        </div>
+
+                        <button type="submit">Save Stock</button>
+                    </form>
+
+                    <p id="stockMessage" role="status" aria-live="polite"></p>
+                </div>
+            </section>
+
+            <!-- PLACE ORDER -->
+            <section id="place-order" class="page-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Place Water Can Order</h2>
+                        <p>Create a new order for a registered customer.</p>
+                    </div>
+                </div>
+
+                <div class="card order-card">
+                    <form id="orderForm">
+                        <div class="form-group">
+                            <label for="customerId">Select Customer</label>
+                            <select id="customerId" required>
+                                <option value="">Loading customers...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="canQuantity">Number of 20L Cans</label>
+                            <input
+                                type="number"
+                                id="canQuantity"
+                                min="1"
+                                step="1"
+                                required
+                                placeholder="Enter quantity">
+                        </div>
+
+                        <div class="price-summary">
+                            <div>
+                                <span>Price per can</span>
+                                <strong>₹40</strong>
+                            </div>
+                            <div>
+                                <span>Total Amount</span>
+                                <strong>₹<span id="totalPrice">0</span></strong>
+                            </div>
+                        </div>
+
+                        <button type="submit">＋ Place Order</button>
+                        <p id="orderMessage" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ORDER HISTORY -->
+            <section id="order-history" class="page-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Order Management</h2>
+                        <p>Review orders, update status and payment, and print bills.</p>
+                    </div>
+
+                    <button type="button" class="secondary-button"
+                        onclick="loadOrders()">
+                        ↻ Refresh Orders
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Can Quantity</th>
+                                    <th>Price (₹)</th>
+                                    <th>Order Date</th>
+                                    <th>Status</th>
+                                    <th>Payment Status</th>
+                                    <th>Bill</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                                <tr>
+                                    <td colspan="9">Loading orders...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="app-footer">
+            <span>© AquaPure Water Can Management</span>
+            <span>Reliable Water. Reliable Service.</span>
+        </footer>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("customerForm");
+    const message = document.getElementById("message");
+    const quantityInput = document.getElementById("canQuantity");
+    const totalPrice = document.getElementById("totalPrice");
+    const orderForm = document.getElementById("orderForm");
+    const orderMessage = document.getElementById("orderMessage");
+
+    // Admin Logout
+    document.getElementById("logoutBtn").addEventListener("click", async function () {
+        const confirmed = confirm("Are you sure you want to logout?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch("/api/logout", { method: "POST" });
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                window.location.replace("/login.html");
+            } else {
+                alert(result.message || "Logout failed. Please try again.");
+            }
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("Server connection failed. Please check the server.");
+        }
+    });
+
+    // Add Customer
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const customer = {
+            name: document.getElementById("name").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            address: document.getElementById("address").value.trim()
+        };
+
+        try {
+            const response = await fetch("/api/customers", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(customer)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Could not add customer");
+            }
+
+            message.textContent = "Customer added successfully!";
+            message.style.color = "green";
+            form.reset();
+
+            await loadCustomersForOrder();
+            await loadCustomerList();
+            await loadDashboard();
+        } catch (error) {
+            message.textContent = "Error: " + error.message;
+            message.style.color = "red";
+        }
+    });
+
+    // Load Customers into Order Dropdown
+    async function loadCustomersForOrder() {
+        const select = document.getElementById("customerId");
+
+        try {
+            const response = await fetch("/api/customers");
+            if (!response.ok) throw new Error("Failed to load customers");
+
+            const customers = await response.json();
+            select.innerHTML = '<option value="">Select Customer</option>';
+
+            customers.forEach(customer => {
+                const option = document.createElement("option");
+                option.value = customer.id;
+                option.textContent = `${customer.name} (${customer.phone})`;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            select.innerHTML = '<option value="">Could not load customers</option>';
+            console.error("Customer loading error:", error);
+        }
+    }
+
+    // Customer List, Search and Edit
+    async function loadCustomerList() {
+        const tbody = document.getElementById("customerListBody");
+        const searchText = document.getElementById("customerSearch")
+            .value.trim().toLowerCase();
+
+        try {
+            const response = await fetch("/api/customers");
+            if (!response.ok) throw new Error("Failed to load customers");
+
+            const customers = await response.json();
+            const filteredCustomers = customers.filter(customer =>
+                String(customer.name || "").toLowerCase().includes(searchText) ||
+                String(customer.phone || "").toLowerCase().includes(searchText)
+            );
+
+            tbody.innerHTML = "";
+
+            if (filteredCustomers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">No customers found</td></tr>';
+                return;
+            }
+
+            filteredCustomers.forEach(customer => {
+                const row = document.createElement("tr");
+
+                [
+                    customer.id,
+                    customer.name,
+                    customer.phone,
+                    customer.address || ""
+                ].forEach(value => {
+                    const cell = document.createElement("td");
+                    cell.textContent = value ?? "";
+                    row.appendChild(cell);
+                });
+
+                const actionCell = document.createElement("td");
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.textContent = "Edit";
+                editButton.className = "secondary-button";
+
+                editButton.addEventListener("click", async () => {
+                    const newName = prompt("Enter customer name:", customer.name || "");
+                    if (newName === null || !newName.trim()) return;
+
+                    const newPhone = prompt("Enter phone number:", customer.phone || "");
+                    if (newPhone === null || !newPhone.trim()) return;
+
+                    const newAddress = prompt("Enter address:", customer.address || "");
+                    if (newAddress === null) return;
+
+                    await updateCustomer(
+                        customer.id,
+                        newName.trim(),
+                        newPhone.trim(),
+                        newAddress.trim()
+                    );
+                });
+const deleteButton = document.createElement("button");
+deleteButton.type = "button";
+deleteButton.textContent = "Delete";
+deleteButton.className = "secondary-button";
+deleteButton.style.marginLeft = "8px";
+deleteButton.style.background = "#fee2e2";
+deleteButton.style.color = "#b91c1c";
+
+deleteButton.addEventListener("click", async () => {
+    const confirmed = confirm(
+        `Delete customer "${customer.name}"?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const response = await fetch(
+            `/api/customers/${customer.id}`,
+            { method: "DELETE" }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Delete failed");
+        }
+
+        alert("Customer deleted successfully!");
+
+        await loadCustomerList();
+        await loadCustomersForOrder();
+        await loadDashboard();
+    } catch (error) {
+        alert(error.message);
+    }
+});
+
+actionCell.appendChild(editButton);
+actionCell.appendChild(deleteButton);
+row.appendChild(actionCell);
+tbody.appendChild(row);
+            });
+        } catch (error) {
+            console.error("Customer List Error:", error);
+            tbody.innerHTML = '<tr><td colspan="5">Failed to load customers</td></tr>';
+        }
+    }
+
+    async function updateCustomer(id, name, phone, address) {
+        try {
+            const response = await fetch(`/api/customers/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, phone, address })
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message || "Customer update failed");
+            }
+
+            alert("Customer updated successfully!");
+            await loadCustomerList();
+            await loadCustomersForOrder();
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+    }
+
+    // Calculate Order Price
+    quantityInput.addEventListener("input", function() {
+        const quantity = Number(quantityInput.value);
+        totalPrice.textContent =
+            Number.isInteger(quantity) && quantity > 0 ? quantity * 40 : 0;
+    });
+
+    // Place Order
+    orderForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        orderMessage.textContent = "Placing order...";
+
+        try {
+            const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    customerId: document.getElementById("customerId").value,
+                    canQuantity: quantityInput.value
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || "Could not place order");
+            }
+
+            orderMessage.textContent = `${data.message} Total: ₹${data.totalPrice}`;
+            orderMessage.style.color = "green";
+
+            orderForm.reset();
+            totalPrice.textContent = "0";
+
+            await loadOrders();
+            await loadDashboard();
+            await loadStock();
+        } catch (error) {
+            orderMessage.textContent = "Error: " + error.message;
+            orderMessage.style.color = "red";
+        }
+    });
+
+    // Load Order History
+    async function loadOrders() {
+        const tableBody = document.getElementById("ordersTableBody");
+
+        try {
+            const response = await fetch("/api/orders");
+           const responseText = await response.text();
+
+let orders;
+try {
+    orders = JSON.parse(responseText);
+} catch {
+    throw new Error(
+        `Orders API returned: ${responseText}`
+    );
+}
+
+if (!response.ok) {
+    throw new Error(
+        typeof orders === "object" && orders.message
+            ? orders.message
+            : "Failed to load orders"
+    );
+}
+            tableBody.innerHTML = "";
+
+            if (orders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="9">No orders found</td></tr>';
+                return;
+            }
+
+            orders.forEach(order => {
+                const row = document.createElement("tr");
+
+                const values = [
+                    order.id,
+                    order.customer_name,
+                    order.phone,
+                    order.can_quantity,
+                    Number(order.price).toFixed(2),
+                    order.order_date
+                        ? new Date(order.order_date).toLocaleString("en-IN")
+                        : ""
+                ];
+
+                values.forEach(value => {
+                    const cell = document.createElement("td");
+                    cell.textContent = value ?? "";
+                    row.appendChild(cell);
+                });
+
+                // Order Status
+                const statusCell = document.createElement("td");
+                const statusSelect = document.createElement("select");
+
+                ["Pending", "Delivered", "Cancelled"].forEach(status => {
+                    const option = document.createElement("option");
+                    option.value = status;
+                    option.textContent = status;
+                    option.selected = status === order.status;
+                    statusSelect.appendChild(option);
+                });
+
+                statusSelect.addEventListener("change", async () => {
+                    try {
+                        const updateResponse = await fetch(
+                            `/api/orders/${order.id}/status`,
+                            {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ status: statusSelect.value })
+                            }
+                        );
+
+                        const result = await updateResponse.json();
+                        if (!updateResponse.ok) {
+                            throw new Error(result.message || "Status update failed");
+                        }
+
+                        await loadDashboard();
+                        await loadStock();
+                        await loadOrders();
+                    } catch (error) {
+                        alert(error.message);
+                        await loadOrders();
+                    }
+                });
+
+                statusCell.appendChild(statusSelect);
+                row.appendChild(statusCell);
+
+                // Payment Status
+                const paymentCell = document.createElement("td");
+                const paymentSelect = document.createElement("select");
+
+                ["Unpaid", "Paid"].forEach(payment => {
+                    const option = document.createElement("option");
+                    option.value = payment;
+                    option.textContent = payment;
+                    option.selected = payment === (order.payment_status || "Unpaid");
+                    paymentSelect.appendChild(option);
+                });
+
+                paymentSelect.addEventListener("change", async () => {
+                    const previousValue = order.payment_status || "Unpaid";
+
+                    try {
+                        paymentSelect.disabled = true;
+
+                        const paymentResponse = await fetch(
+                            `/api/orders/${order.id}/payment`,
+                            {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    payment_status: paymentSelect.value
+                                })
+                            }
+                        );
+
+                        const result = await paymentResponse.json();
+                        if (!paymentResponse.ok) {
+                            throw new Error(
+                                result.message || "Payment status update failed"
+                            );
+                        }
+
+                        order.payment_status = paymentSelect.value;
+                        alert("Payment status updated successfully!");
+                    } catch (error) {
+                        alert(error.message);
+                        paymentSelect.value = previousValue;
+                    } finally {
+                        paymentSelect.disabled = false;
+                    }
+                });
+
+                paymentCell.appendChild(paymentSelect);
+                row.appendChild(paymentCell);
+
+                // Print Bill
+                const billCell = document.createElement("td");
+                const printButton = document.createElement("button");
+
+                printButton.type = "button";
+                printButton.textContent = "Print Bill";
+                printButton.className = "secondary-button";
+
+                printButton.addEventListener("click", () => printOrderBill(order));
+billCell.appendChild(printButton);
+row.appendChild(billCell);
+
+// Delete Order
+                const actionCell = document.createElement("td");
+                const deleteOrderButton = document.createElement("button");
+
+                deleteOrderButton.type = "button";
+                deleteOrderButton.textContent = "Delete Order";
+                deleteOrderButton.className = "secondary-button";
+                deleteOrderButton.style.background = "#fee2e2";
+                deleteOrderButton.style.color = "#b91c1c";
+
+                deleteOrderButton.addEventListener("click", async () => {
+                    if (!confirm(`Permanently delete Order #${order.id}?`)) return;
+
+                    deleteOrderButton.disabled = true;
+
+                    try {
+                        const response = await fetch(`/api/orders/${order.id}`, {
+                            method: "DELETE"
+                        });
+
+                        const text = await response.text();
+                        let result;
+
+                        try {
+                            result = JSON.parse(text);
+                        } catch {
+                            throw new Error(
+                                `API route not found or invalid response (${response.status}): ${text}`
+                            );
+                        }
+
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.message || "Order deletion failed");
+                        }
+
+                        alert("Order deleted successfully!");
+                        await loadOrders();
+                        await loadDashboard();
+                        await loadStock();
+                    } catch (error) {
+                        alert(error.message);
+                        deleteOrderButton.disabled = false;
+                    }
+                });
+
+                actionCell.appendChild(deleteOrderButton);
+                row.appendChild(actionCell);
+
+tableBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error("Orders Error:", error);
+            tableBody.innerHTML = '<tr><td colspan="9">Orders could not be loaded.</td></tr>';
+        }
+    }
+
+    // Print Bill
+    function printOrderBill(order) {
+        const billWindow = window.open("", "_blank", "width=700,height=700");
+
+        if (!billWindow) {
+            alert("Bill print करण्यासाठी browser popup allow करा.");
+            return;
+        }
+
+        const quantity = Number(order.can_quantity) || 0;
+        const total = Number(order.price) || quantity * 40;
+        const orderDate = order.order_date
+            ? new Date(order.order_date).toLocaleString("en-IN")
+            : new Date().toLocaleString("en-IN");
+
+        billWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>AquaPure Bill</title>
+                <meta charset="UTF-8">
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        max-width: 650px;
+                        margin: 30px auto;
+                        padding: 20px;
+                        color: #123047;
+                    }
+                    h1, h2, p { text-align: center; }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 25px;
+                    }
+                    th, td {
+                        border: 1px solid #777;
+                        padding: 12px;
+                        text-align: left;
+                    }
+                    .total {
+                        text-align: right;
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin-top: 20px;
+                    }
+                    .print-btn {
+                        display: block;
+                        margin: 25px auto;
+                        padding: 10px 20px;
+                        cursor: pointer;
+                    }
+                    @media print {
+                        .print-btn { display: none; }
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>AquaPure 💧</h1>
+                <h2>Water Can Bill</h2>
+                <p>Order ID: ${Number(order.id)}</p>
+
+                <table>
+                    <tr>
+                        <th>Customer Name</th>
+                        <td>${escapeBillText(order.customer_name)}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>${escapeBillText(order.phone)}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <td>${escapeBillText(orderDate)}</td>
+                    </tr>
+                    <tr>
+                        <th>Can Quantity</th>
+                        <td>${quantity}</td>
+                    </tr>
+                    <tr>
+                        <th>Rate per Can</th>
+                        <td>₹40</td>
+                    </tr>
+                    <tr>
+                        <th>Payment Status</th>
+                        <td>${escapeBillText(order.payment_status || "Unpaid")}</td>
+                    </tr>
+                </table>
+
+                <p class="total">Total Amount: ₹${total.toFixed(2)}</p>
+                <p>Thank you for choosing AquaPure!</p>
+                <button class="print-btn" onclick="window.print()">Print Bill</button>
+            </body>
+            </html>
+        `);
+
+        billWindow.document.close();
+    }
+
+    // Safely display text in the bill
+    function escapeBillText(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[character]);
+    }
+
+    // Load Stock
+    async function loadStock() {
+        const stockMessage = document.getElementById("stockMessage");
+
+        try {
+            const response = await fetch("/api/stock");
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Stock load failed");
+            }
+
+            const total = Number(data.stock.total_cans);
+            const available = Number(data.stock.available_cans);
+
+            document.getElementById("stockTotal").textContent = total;
+            document.getElementById("stockAvailable").textContent = available;
+            document.getElementById("stockInUse").textContent = total - available;
+
+            document.getElementById("totalCansInput").value = total;
+            document.getElementById("availableCansInput").value = available;
+
+            stockMessage.textContent = "";
+        } catch (error) {
+            console.error("Stock loading error:", error);
+            stockMessage.textContent = "Stock load failed: " + error.message;
+            stockMessage.style.color = "red";
+        }
+    }
+
+    // Update Stock
+    document.getElementById("stockForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const total = Number(document.getElementById("totalCansInput").value);
+        const available = Number(document.getElementById("availableCansInput").value);
+        const stockMessage = document.getElementById("stockMessage");
+
+        if (
+            !Number.isInteger(total) ||
+            !Number.isInteger(available) ||
+            total < 0 ||
+            available < 0 ||
+            available > total
+        ) {
+            stockMessage.textContent =
+                "Available Cans हे Total Cans पेक्षा जास्त असू शकत नाहीत.";
+            stockMessage.style.color = "red";
+            return;
+        }
+
+        try {
+            stockMessage.textContent = "Updating stock...";
+
+            const response = await fetch("/api/stock", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    total_cans: total,
+                    available_cans: available
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Stock update failed");
+            }
+
+            stockMessage.textContent = "Stock updated successfully!";
+            stockMessage.style.color = "green";
+            await loadStock();
+        } catch (error) {
+            console.error("Stock update error:", error);
+            stockMessage.textContent = "Error: " + error.message;
+            stockMessage.style.color = "red";
+        }
+    });
+
+    // Dashboard Data
+    async function loadDashboard() {
+        try {
+            const response = await fetch("/api/dashboard");
+            if (!response.ok) throw new Error("Dashboard data load failed");
+
+            const data = await response.json();
+
+            document.getElementById("totalCustomers").textContent =
+                data.totalCustomers;
+
+            document.getElementById("totalOrders").textContent =
+                data.totalOrders;
+
+            document.getElementById("totalSales").textContent =
+                "₹" + Number(data.totalSales).toLocaleString("en-IN");
+        } catch (error) {
+            console.error("Dashboard error:", error);
+        }
+    }
+
+    // Sidebar navigation active state and heading
+    const navLinks = document.querySelectorAll(".sidebar-nav .nav-link");
+    const pageHeading = document.getElementById("pageHeading");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", function() {
+            navLinks.forEach(item => item.classList.remove("active"));
+            this.classList.add("active");
+
+            const label = this.textContent.trim().replace(/^[▦♙▣＋☷▤]\s*/, "");
+            if (pageHeading && !this.getAttribute("href").startsWith("/")) {
+                pageHeading.textContent = label;
+            }
+        });
+    });
+
+    // Initial Load
+    loadCustomersForOrder();
+    loadCustomerList();
+    loadOrders();
+    loadDashboard();
+    loadStock();
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaPure Admin Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dff6ff, #168aad);
+        }
+
+        .login-box {
+            width: 90%;
+            max-width: 380px;
+            padding: 32px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px #00304930;
+        }
+
+        h1 {
+            color: #087eaa;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        p {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin: 14px 0 6px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            background: #087eaa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #05668d;
+        }
+
+        #message {
+            margin-top: 16px;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <h1>AquaPure</h1>
+        <p>Admin Login</p>
+
+        <form id="loginForm">
+            <label for="username">Username</label>
+            <input id="username" name="username"
+                   type="text" required autocomplete="username">
+
+            <label for="password">Password</label>
+            <input id="password" name="password"
+                   type="password" required
+                   autocomplete="current-password">
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p id="message" role="status"></p>
+    </div>
+
+    <script>
+        const form = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            message.textContent = "Logging in...";
+
+            try {
+                const response = await fetch("/api/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: document.getElementById("username").value,
+                        password: document.getElementById("password").value
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    window.location.href = "/";
+                } else {
+                    message.textContent =
+                        result.message || "Login failed";
+                }
+            } catch (error) {
+                message.textContent =
+                    "Server connection failed. Check the server.";
+            }
+        });
+    </script>
+</body>
+</html>
